@@ -473,12 +473,38 @@
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
   /* ── RESPONSIVE ── */
-  @media (max-width: 860px) {
+ @media (max-width: 860px) {
     .hero { grid-template-columns: 1fr; text-align: center; }
     .hero-contacts { justify-content: center; }
     .hero-right { order: -1; }
     .hero-summary { margin: 0 auto; }
   }
+
+  /* ── GITHUB BUTTON ── */
+  .gh-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    font-size: .65rem;
+    color: var(--bg);
+    text-decoration: none;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    padding: 8px 18px;
+    border-radius: 100px;
+    font-weight: 700;
+    border: none;
+    transition: opacity .25s, box-shadow .25s, transform .2s;
+    box-shadow: 0 0 18px rgba(0,212,255,0.35);
+  }
+  .gh-btn:hover {
+    opacity: .88;
+    box-shadow: 0 0 30px rgba(0,212,255,0.6), 0 0 60px rgba(0,255,179,0.2);
+    transform: translateY(-2px);
+  }
+
 </style>
 </head>
 <body>
@@ -615,7 +641,9 @@
     </div>
   </section>
 
-  <!-- ═══ PROJECTS ═══ --><section id="projects">
+ 
+ <!-- ═══ PROJECTS ═══ -->
+<section id="projects">
     <div class="section-label reveal fade-up">What I've Built</div>
     <h2 class="section-title reveal fade-up">Projects</h2>
     <div class="projects-grid">
@@ -718,7 +746,7 @@
       </div>
 
     </div>
-</section></section>
+</section>
   <!-- ═══ EDUCATION ═══ -->
   <section id="education">
     <div class="section-label reveal fade-up">Academic Background</div>
