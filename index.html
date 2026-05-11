@@ -1,1354 +1,512 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marwan AbdelRahim — Flutter Developer</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-/* ═══════════════════════════════════════════
-   FLUTTER THEME — CSS VARIABLES
-═══════════════════════════════════════════ */
-:root {
-  --md-sys-color-background: #0d1117;
-  --md-sys-color-surface: #161b22;
-  --md-sys-color-surface-variant: #21262d;
-  --md-sys-color-primary: #58a6ff;
-  --md-sys-color-secondary: #3fb950;
-  --md-sys-color-tertiary: #f78166;
-  --md-sys-color-on-background: #e6edf3;
-  --md-sys-color-on-surface: #c9d1d9;
-  --md-sys-color-on-surface-variant: #8b949e;
-  --md-sys-color-outline: #30363d;
-  --md-sys-color-outline-variant: #21262d;
-  --flutter-blue: #54c5f8;
-  --flutter-sky: #01579b;
-  --flutter-dark: #0553b1;
-  --elevation-1: 0 1px 3px rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.5);
-  --elevation-2: 0 3px 6px rgba(0,0,0,.4), 0 3px 6px rgba(0,0,0,.5);
-  --elevation-3: 0 10px 20px rgba(0,0,0,.4), 0 6px 6px rgba(0,0,0,.5);
-  --shape-sm: 8px;
-  --shape-md: 12px;
-  --shape-lg: 16px;
-  --shape-xl: 28px;
-  --shape-full: 9999px;
+# main.dart
+
+انسخ هذا الملف بالكامل إلى `lib/main.dart` داخل مشروع Flutter جديد.
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const PortfolioApp());
 }
 
-/* ═══════════════════════════════════════════
-   RESET & BASE
-═══════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--md-sys-color-background);
-  color: var(--md-sys-color-on-background);
-  font-family: 'JetBrains Mono', monospace;
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-a { text-decoration: none; color: inherit; }
+class PortfolioApp extends StatelessWidget {
+  const PortfolioApp({super.key});
 
-/* ═══════════════════════════════════════════
-   FLUTTER SPLASH / LOADER
-═══════════════════════════════════════════ */
-#flutter-splash {
-  position: fixed; inset: 0; z-index: 9999;
-  background: var(--md-sys-color-background);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 32px;
-  transition: opacity .6s ease .2s, visibility .6s .2s;
-}
-#flutter-splash.hidden { opacity: 0; visibility: hidden; }
-
-.splash-logo {
-  position: relative;
-  width: 80px; height: 80px;
-}
-.splash-logo svg { width: 80px; height: 80px; }
-
-/* Flutter logo animation */
-.flutter-wing {
-  transform-origin: 50% 50%;
-  animation: wingFlap 1.5s ease-in-out infinite alternate;
-}
-.flutter-wing-2 {
-  transform-origin: 50% 50%;
-  animation: wingFlap2 1.5s ease-in-out infinite alternate;
-}
-@keyframes wingFlap {
-  from { transform: rotate(-5deg) scaleY(1); }
-  to   { transform: rotate(5deg) scaleY(1.05); }
-}
-@keyframes wingFlap2 {
-  from { transform: rotate(5deg) scaleY(1.05); }
-  to   { transform: rotate(-5deg) scaleY(1); }
-}
-
-.splash-text {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.4rem;
-  font-weight: 600;
-  letter-spacing: .3em;
-  color: var(--flutter-blue);
-  text-transform: uppercase;
-}
-
-.splash-progress {
-  width: 200px; height: 2px;
-  background: var(--md-sys-color-outline);
-  border-radius: 2px; overflow: hidden;
-}
-.splash-bar {
-  height: 100%; width: 0%;
-  background: linear-gradient(90deg, var(--flutter-blue), var(--md-sys-color-secondary));
-  border-radius: 2px;
-  animation: splashLoad 2s cubic-bezier(.4,0,.2,1) forwards;
-  box-shadow: 0 0 8px var(--flutter-blue);
-}
-@keyframes splashLoad { to { width: 100%; } }
-
-/* ═══════════════════════════════════════════
-   FLUTTER NAVIGATION BAR (AppBar)
-═══════════════════════════════════════════ */
-.app-bar {
-  position: fixed; top: 0; left: 0; right: 0;
-  height: 64px;
-  background: rgba(13,17,23,.85);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid var(--md-sys-color-outline);
-  display: flex; align-items: center;
-  padding: 0 clamp(16px, 5vw, 80px);
-  z-index: 1000;
-  gap: 0;
-}
-
-.app-bar-title {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--flutter-blue);
-  letter-spacing: .08em;
-  margin-right: auto;
-  display: flex; align-items: center; gap: 10px;
-}
-.app-bar-title .flutter-icon {
-  width: 28px; height: 28px;
-}
-
-.nav-actions {
-  display: flex; gap: 4px; align-items: center;
-}
-.nav-link {
-  font-size: .72rem;
-  padding: 8px 14px;
-  border-radius: var(--shape-full);
-  color: var(--md-sys-color-on-surface-variant);
-  transition: background .2s, color .2s;
-  letter-spacing: .04em;
-  font-weight: 500;
-}
-.nav-link:hover {
-  background: rgba(88,166,255,.1);
-  color: var(--flutter-blue);
-}
-
-/* ═══════════════════════════════════════════
-   FLUTTER CANVAS (particle background)
-═══════════════════════════════════════════ */
-#bg-canvas {
-  position: fixed; inset: 0;
-  z-index: 0; pointer-events: none;
-}
-
-/* ═══════════════════════════════════════════
-   SCAFFOLD BODY
-═══════════════════════════════════════════ */
-.scaffold-body {
-  padding-top: 64px;
-  position: relative; z-index: 1;
-}
-
-/* ═══════════════════════════════════════════
-   HERO — Flutter "Scaffold + Column" Layout
-═══════════════════════════════════════════ */
-.hero-section {
-  min-height: calc(100vh - 64px);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 60px;
-  padding: clamp(40px, 8vw, 100px) clamp(20px, 5vw, 80px);
-  position: relative;
-}
-
-/* Flutter-style gradient mesh background */
-.hero-section::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 600px 500px at 20% 50%, rgba(84,197,248,.04) 0%, transparent 70%),
-    radial-gradient(ellipse 400px 400px at 80% 20%, rgba(63,185,80,.03) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.hero-column {
-  display: flex; flex-direction: column; gap: 24px;
-  max-width: 680px;
-}
-
-/* Flutter chip / label */
-.flutter-chip {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 14px;
-  border-radius: var(--shape-full);
-  border: 1px solid rgba(84,197,248,.3);
-  background: rgba(84,197,248,.06);
-  font-size: .68rem;
-  color: var(--flutter-blue);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  font-weight: 500;
-  width: fit-content;
-  opacity: 0;
-  animation: fadeSlideUp .5s .4s ease forwards;
-}
-.flutter-chip::before {
-  content: '';
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--md-sys-color-secondary);
-  box-shadow: 0 0 6px var(--md-sys-color-secondary);
-  animation: blink 2s ease-in-out infinite;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-.hero-headline {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(2.8rem, 6vw, 5rem);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -.01em;
-  opacity: 0;
-  animation: fadeSlideUp .6s .5s ease forwards;
-}
-.hero-headline .name-gradient {
-  background: linear-gradient(135deg, var(--md-sys-color-on-background) 0%, var(--flutter-blue) 50%, var(--md-sys-color-secondary) 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradientShift 5s linear infinite;
-}
-@keyframes gradientShift { to { background-position: 200% center; } }
-
-.hero-subtitle {
-  font-size: clamp(.8rem, 1.5vw, 1rem);
-  color: var(--md-sys-color-on-surface-variant);
-  font-weight: 400;
-  opacity: 0;
-  animation: fadeSlideUp .5s .6s ease forwards;
-}
-.hero-subtitle .highlight {
-  color: var(--flutter-blue);
-  font-weight: 500;
-}
-
-.hero-body {
-  font-size: .8rem;
-  color: var(--md-sys-color-on-surface);
-  max-width: 560px;
-  line-height: 1.9;
-  opacity: 0;
-  animation: fadeSlideUp .5s .7s ease forwards;
-}
-
-/* Flutter FilledButton / OutlinedButton style */
-.button-row {
-  display: flex; flex-wrap: wrap; gap: 12px;
-  opacity: 0;
-  animation: fadeSlideUp .5s .8s ease forwards;
-}
-
-.md-filled-button {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 10px 24px;
-  border-radius: var(--shape-full);
-  background: var(--flutter-blue);
-  color: #0d1117;
-  font-size: .72rem;
-  font-weight: 700;
-  letter-spacing: .06em;
-  font-family: 'JetBrains Mono', monospace;
-  transition: box-shadow .25s, transform .2s, opacity .2s;
-  box-shadow: 0 0 20px rgba(84,197,248,.3);
-}
-.md-filled-button:hover {
-  box-shadow: 0 0 35px rgba(84,197,248,.55);
-  transform: translateY(-2px);
-}
-
-.md-outlined-button {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 9px 22px;
-  border-radius: var(--shape-full);
-  border: 1.5px solid var(--md-sys-color-outline);
-  color: var(--md-sys-color-on-surface);
-  font-size: .72rem;
-  font-weight: 500;
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: .04em;
-  transition: border-color .25s, background .25s, color .25s;
-}
-.md-outlined-button:hover {
-  border-color: var(--flutter-blue);
-  background: rgba(84,197,248,.06);
-  color: var(--flutter-blue);
-}
-
-/* ═══════════════════════════════════════════
-   FLUTTER PROFILE CARD (Material Card)
-═══════════════════════════════════════════ */
-.profile-card-wrap {
-  opacity: 0;
-  animation: fadeIn .8s .6s ease forwards;
-}
-
-.profile-card {
-  width: 280px;
-  background: var(--md-sys-color-surface);
-  border-radius: var(--shape-xl);
-  border: 1px solid var(--md-sys-color-outline);
-  padding: 36px 28px 32px;
-  text-align: center;
-  box-shadow:
-    var(--elevation-3),
-    0 0 0 1px rgba(84,197,248,.07) inset;
-  position: relative;
-  overflow: hidden;
-  animation: cardFloat 7s ease-in-out infinite;
-}
-
-/* Flutter card surface tint */
-.profile-card::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(160deg, rgba(84,197,248,.05) 0%, transparent 55%);
-  pointer-events: none;
-}
-/* Accent top border */
-.profile-card::after {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--flutter-blue), var(--md-sys-color-secondary), transparent);
-}
-
-@keyframes cardFloat {
-  0%,100% { transform: translateY(0px) rotate(0deg); }
-  33%      { transform: translateY(-12px) rotate(.5deg); }
-  66%      { transform: translateY(-6px) rotate(-.4deg); }
-}
-
-/* Avatar with Flutter icon ring */
-.avatar-container {
-  position: relative;
-  width: 96px; height: 96px;
-  margin: 0 auto 20px;
-}
-.avatar-ring {
-  position: absolute; inset: -8px;
-  border-radius: 50%;
-  border: 1.5px dashed rgba(84,197,248,.4);
-  animation: spinRing 12s linear infinite;
-}
-.avatar-ring-2 {
-  position: absolute; inset: -16px;
-  border-radius: 50%;
-  border: 1px dashed rgba(63,185,80,.25);
-  animation: spinRing 20s linear infinite reverse;
-}
-@keyframes spinRing { to { transform: rotate(360deg); } }
-
-.avatar-circle {
-  width: 96px; height: 96px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #0553b1 0%, #54c5f8 100%);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #fff;
-  position: relative; z-index: 1;
-  box-shadow: 0 0 0 3px rgba(84,197,248,.15), 0 8px 24px rgba(0,0,0,.4);
-  animation: avatarGlow 4s ease-in-out infinite;
-}
-@keyframes avatarGlow {
-  0%,100% { box-shadow: 0 0 0 3px rgba(84,197,248,.15), 0 8px 24px rgba(0,0,0,.4); }
-  50%      { box-shadow: 0 0 0 3px rgba(84,197,248,.3), 0 8px 32px rgba(84,197,248,.25); }
-}
-
-/* Flutter status indicator */
-.status-dot {
-  position: absolute; bottom: 4px; right: 4px;
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  background: var(--md-sys-color-secondary);
-  border: 2px solid var(--md-sys-color-surface);
-  box-shadow: 0 0 8px var(--md-sys-color-secondary);
-  z-index: 2;
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-@keyframes pulse-dot {
-  0%,100% { box-shadow: 0 0 6px var(--md-sys-color-secondary); }
-  50% { box-shadow: 0 0 16px var(--md-sys-color-secondary), 0 0 30px rgba(63,185,80,.3); }
-}
-
-.card-name {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--md-sys-color-on-background);
-  margin-bottom: 4px;
-}
-.card-handle {
-  font-size: .65rem;
-  color: var(--flutter-blue);
-  letter-spacing: .12em;
-  margin-bottom: 20px;
-}
-
-/* Flutter FilterChip style tags */
-.tag-wrap {
-  display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
-  margin-bottom: 20px;
-}
-.filter-chip {
-  font-size: .58rem;
-  padding: 4px 11px;
-  border-radius: var(--shape-full);
-  background: var(--md-sys-color-surface-variant);
-  border: 1px solid var(--md-sys-color-outline);
-  color: var(--md-sys-color-on-surface-variant);
-  letter-spacing: .06em;
-}
-
-/* Divider */
-.card-divider {
-  height: 1px;
-  background: var(--md-sys-color-outline);
-  margin: 16px 0;
-}
-
-.card-stat-row {
-  display: flex; justify-content: space-around;
-}
-.card-stat { text-align: center; }
-.stat-value {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--flutter-blue);
-}
-.stat-label {
-  font-size: .58rem;
-  color: var(--md-sys-color-on-surface-variant);
-  letter-spacing: .08em;
-}
-
-/* ═══════════════════════════════════════════
-   SECTION COMMONS
-═══════════════════════════════════════════ */
-.section {
-  padding: clamp(60px, 8vw, 100px) clamp(20px, 5vw, 80px);
-  border-top: 1px solid var(--md-sys-color-outline);
-}
-
-.section-header { margin-bottom: 48px; }
-
-.overline {
-  font-size: .62rem;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--md-sys-color-secondary);
-  margin-bottom: 8px;
-}
-
-.section-headline {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
-  font-weight: 700;
-  color: var(--md-sys-color-on-background);
-  line-height: 1.1;
-}
-
-/* ═══════════════════════════════════════════
-   SCROLL REVEAL
-═══════════════════════════════════════════ */
-.reveal {
-  opacity: 0;
-  transition: opacity .65s ease, transform .65s ease;
-}
-.reveal.up    { transform: translateY(40px); }
-.reveal.left  { transform: translateX(-50px); }
-.reveal.right { transform: translateX(50px); }
-.reveal.in    { opacity: 1; transform: none; }
-
-/* ═══════════════════════════════════════════
-   SKILLS — LinearProgressIndicator style
-═══════════════════════════════════════════ */
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 14px;
-}
-
-.skill-tile {
-  background: var(--md-sys-color-surface);
-  border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--shape-lg);
-  padding: 20px 22px;
-  transition: border-color .25s, box-shadow .25s;
-}
-.skill-tile:hover {
-  border-color: rgba(84,197,248,.4);
-  box-shadow: 0 0 0 1px rgba(84,197,248,.1) inset, var(--elevation-2);
-}
-
-.skill-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 12px;
-}
-.skill-label {
-  font-size: .75rem;
-  font-weight: 500;
-  color: var(--md-sys-color-on-surface);
-}
-.skill-value {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: .9rem;
-  font-weight: 700;
-  color: var(--flutter-blue);
-}
-
-/* Flutter LinearProgressIndicator */
-.progress-track {
-  height: 4px;
-  background: var(--md-sys-color-surface-variant);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.progress-fill {
-  height: 100%;
-  border-radius: 4px;
-  background: linear-gradient(90deg, var(--flutter-sky), var(--flutter-blue), var(--md-sys-color-secondary));
-  width: 0%;
-  transition: width 1.4s cubic-bezier(.4,0,.2,1);
-}
-
-/* ═══════════════════════════════════════════
-   PROJECTS — Material Card style
-═══════════════════════════════════════════ */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.project-card {
-  background: var(--md-sys-color-surface);
-  border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--shape-xl);
-  padding: 28px;
-  position: relative;
-  overflow: hidden;
-  transition: transform .3s cubic-bezier(.4,0,.2,1), border-color .3s, box-shadow .3s;
-  display: flex; flex-direction: column;
-}
-.project-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--flutter-sky), var(--flutter-blue), var(--md-sys-color-secondary));
-  opacity: 0;
-  transition: opacity .3s;
-}
-.project-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(84,197,248,.3);
-  box-shadow: 0 16px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(84,197,248,.08) inset;
-}
-.project-card:hover::before { opacity: 1; }
-
-.proj-category {
-  font-size: .6rem;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--md-sys-color-secondary);
-  margin-bottom: 10px;
-  display: flex; align-items: center; gap: 6px;
-}
-.proj-category::before {
-  content: '';
-  display: inline-block;
-  width: 16px; height: 1px;
-  background: var(--md-sys-color-secondary);
-}
-
-.proj-title {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--md-sys-color-on-background);
-  margin-bottom: 12px;
-}
-.proj-description {
-  font-size: .73rem;
-  color: var(--md-sys-color-on-surface-variant);
-  line-height: 1.8;
-  margin-bottom: 20px;
-  flex: 1;
-}
-.chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
-.tech-chip {
-  font-size: .58rem;
-  padding: 4px 11px;
-  border-radius: var(--shape-full);
-  background: rgba(84,197,248,.08);
-  border: 1px solid rgba(84,197,248,.2);
-  color: var(--flutter-blue);
-  letter-spacing: .06em;
-}
-
-/* Flutter ElevatedButton for GitHub */
-.github-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 8px 18px;
-  border-radius: var(--shape-full);
-  background: var(--md-sys-color-surface-variant);
-  border: 1px solid var(--md-sys-color-outline);
-  color: var(--md-sys-color-on-surface);
-  font-size: .65rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 500;
-  letter-spacing: .04em;
-  width: fit-content;
-  transition: background .2s, border-color .2s, color .2s;
-}
-.github-btn svg { width: 13px; height: 13px; fill: currentColor; }
-.github-btn:hover {
-  background: rgba(84,197,248,.1);
-  border-color: var(--flutter-blue);
-  color: var(--flutter-blue);
-}
-
-/* ═══════════════════════════════════════════
-   EDUCATION — Flutter ListTile / Card
-═══════════════════════════════════════════ */
-.edu-card {
-  background: var(--md-sys-color-surface);
-  border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--shape-xl);
-  padding: 32px;
-  margin-bottom: 16px;
-  transition: border-color .25s;
-  position: relative;
-  overflow: hidden;
-}
-.edu-card::before {
-  content: '';
-  position: absolute; left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--flutter-blue), var(--md-sys-color-secondary));
-  border-radius: 0 2px 2px 0;
-}
-.edu-card:hover { border-color: rgba(84,197,248,.3); }
-
-.edu-institute {
-  font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--flutter-blue); margin-bottom: 8px;
-}
-.edu-degree {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.15rem; font-weight: 700;
-  color: var(--md-sys-color-on-background);
-  margin-bottom: 6px;
-}
-.edu-year {
-  font-size: .7rem; color: var(--md-sys-color-on-surface-variant);
-  margin-bottom: 18px;
-}
-.course-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.course-chip {
-  font-size: .62rem; padding: 5px 13px;
-  border-radius: var(--shape-full);
-  border: 1px solid var(--md-sys-color-outline);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-/* Certification ListTile */
-.cert-tile {
-  display: flex; align-items: center; gap: 16px;
-  padding: 16px 22px;
-  background: var(--md-sys-color-surface);
-  border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--shape-lg);
-  margin-bottom: 12px;
-  transition: border-color .25s, background .25s;
-}
-.cert-tile:hover {
-  background: var(--md-sys-color-surface-variant);
-  border-color: rgba(84,197,248,.25);
-}
-.cert-leading {
-  width: 44px; height: 44px;
-  border-radius: var(--shape-md);
-  background: linear-gradient(135deg, var(--flutter-sky), var(--flutter-blue));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.15rem; flex-shrink: 0;
-}
-.cert-title { font-size: .83rem; font-weight: 600; color: var(--md-sys-color-on-surface); }
-.cert-sub { font-size: .68rem; color: var(--md-sys-color-on-surface-variant); margin-top: 3px; }
-
-/* ═══════════════════════════════════════════
-   SOFT SKILLS — Flutter GridView
-═══════════════════════════════════════════ */
-.soft-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 14px;
-}
-.soft-card {
-  background: var(--md-sys-color-surface);
-  border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--shape-lg);
-  padding: 24px 20px;
-  text-align: center;
-  transition: border-color .25s, transform .25s;
-}
-.soft-card:hover {
-  border-color: rgba(63,185,80,.3);
-  transform: translateY(-3px);
-}
-.soft-emoji { font-size: 1.7rem; margin-bottom: 10px; }
-.soft-text {
-  font-size: .75rem;
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 600;
-  color: var(--md-sys-color-on-surface);
-  letter-spacing: .04em;
-}
-
-/* ═══════════════════════════════════════════
-   LANGUAGES
-═══════════════════════════════════════════ */
-.lang-row { display: flex; gap: 16px; flex-wrap: wrap; }
-.lang-card {
-  flex: 1; min-width: 200px;
-  background: var(--md-sys-color-surface);
-  border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--shape-xl);
-  padding: 28px;
-  display: flex; align-items: center; gap: 16px;
-  transition: border-color .25s;
-}
-.lang-card:hover { border-color: rgba(84,197,248,.3); }
-.lang-flag {
-  width: 48px; height: 48px;
-  border-radius: var(--shape-md);
-  background: var(--md-sys-color-surface-variant);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem;
-}
-.lang-name {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.1rem; font-weight: 700;
-  color: var(--md-sys-color-on-background);
-}
-.lang-level { font-size: .68rem; color: var(--md-sys-color-secondary); margin-top: 3px; letter-spacing: .06em; }
-
-/* ═══════════════════════════════════════════
-   BOTTOM NAV / FOOTER
-═══════════════════════════════════════════ */
-.footer {
-  padding: 36px clamp(20px, 5vw, 80px);
-  border-top: 1px solid var(--md-sys-color-outline);
-  display: flex; justify-content: space-between; align-items: center;
-  flex-wrap: wrap; gap: 16px;
-}
-.footer-copy {
-  font-size: .68rem;
-  color: var(--md-sys-color-on-surface-variant);
-}
-.footer-copy span { color: var(--flutter-blue); }
-.footer-links { display: flex; gap: 8px; flex-wrap: wrap; }
-.footer-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 14px;
-  border-radius: var(--shape-full);
-  border: 1px solid var(--md-sys-color-outline);
-  font-size: .65rem;
-  color: var(--md-sys-color-on-surface-variant);
-  transition: border-color .2s, color .2s;
-}
-.footer-pill svg { width: 12px; height: 12px; fill: currentColor; }
-.footer-pill:hover { border-color: var(--flutter-blue); color: var(--flutter-blue); }
-
-/* ═══════════════════════════════════════════
-   FLUTTER FAB (back to top)
-═══════════════════════════════════════════ */
-.fab {
-  position: fixed; bottom: 28px; right: 28px;
-  width: 56px; height: 56px;
-  border-radius: 16px;
-  background: var(--flutter-blue);
-  color: #0d1117;
-  border: none;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem;
-  box-shadow: 0 4px 14px rgba(84,197,248,.35);
-  z-index: 500;
-  transition: transform .25s, box-shadow .25s;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .3s, visibility .3s, transform .25s;
-}
-.fab.visible { opacity: 1; visibility: visible; }
-.fab:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(84,197,248,.5);
-}
-
-/* ═══════════════════════════════════════════
-   ANIMATIONS
-═══════════════════════════════════════════ */
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* ═══════════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════════ */
-@media (max-width: 840px) {
-  .hero-section {
-    grid-template-columns: 1fr;
-    text-align: center;
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Marwan Portfolio',
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF0D1117),
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFF54C5F8),
+          secondary: Color(0xFF3FB950),
+          surface: Color(0xFF161B22),
+        ),
+        useMaterial3: true,
+      ),
+      home: const SplashScreen(),
+    );
   }
-  .hero-column { align-items: center; }
-  .hero-body { text-align: left; }
-  .profile-card-wrap { order: -1; }
-  .nav-actions { display: none; }
 }
 
-/* ═══════════════════════════════════════════
-   SNACKBAR (Flutter-inspired notification)
-═══════════════════════════════════════════ */
-.snackbar {
-  position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
-  background: var(--md-sys-color-surface-variant);
-  border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--shape-lg);
-  padding: 12px 20px;
-  font-size: .72rem;
-  color: var(--md-sys-color-on-surface);
-  z-index: 600;
-  opacity: 0; visibility: hidden;
-  transition: all .3s;
-  white-space: nowrap;
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
 }
-.snackbar.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-</style>
-</head>
-<body>
 
-<!-- ═══ FLUTTER SPLASH SCREEN ═══ -->
-<div id="flutter-splash">
-  <div class="splash-logo">
-    <!-- Flutter logo SVG -->
-    <svg viewBox="0 0 66 75" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path class="flutter-wing" d="M37.7 0L0 37.7l10.6 10.6L58.9 0H37.7z" fill="#54C5F8"/>
-      <path class="flutter-wing-2" d="M37.7 29.6L16.2 51.1l10.7 10.7 10.8-10.8L58.9 29.6H37.7z" fill="#01BDFD"/>
-      <path d="M16.2 51.1l10.7 10.7L16.2 72.5 5.5 61.8l10.7-10.7z" fill="#00B4AB"/>
-      <path d="M26.9 61.8l10.8 10.7H16.2l10.7-10.7z" fill="#54C5F8" opacity=".6"/>
-    </svg>
-  </div>
-  <div class="splash-text">Marwan.dev</div>
-  <div class="splash-progress"><div class="splash-bar"></div></div>
-</div>
-
-<!-- ═══ PARTICLE CANVAS ═══ -->
-<canvas id="bg-canvas"></canvas>
-
-<!-- ═══ APP BAR ═══ -->
-<header class="app-bar">
-  <div class="app-bar-title">
-    <svg class="flutter-icon" viewBox="0 0 66 75" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M37.7 0L0 37.7l10.6 10.6L58.9 0H37.7z" fill="#54C5F8"/>
-      <path d="M37.7 29.6L16.2 51.1l10.7 10.7 10.8-10.8L58.9 29.6H37.7z" fill="#01BDFD"/>
-      <path d="M16.2 51.1l10.7 10.7L16.2 72.5 5.5 61.8l10.7-10.7z" fill="#00B4AB"/>
-    </svg>
-    marwan.dev
-  </div>
-  <nav class="nav-actions">
-    <a class="nav-link" href="#skills">Skills</a>
-    <a class="nav-link" href="#projects">Projects</a>
-    <a class="nav-link" href="#education">Education</a>
-    <a class="nav-link" href="#languages">Languages</a>
-  </nav>
-</header>
-
-<div class="scaffold-body">
-
-  <!-- ═══ HERO ═══ -->
-  <section class="hero-section">
-    <div class="hero-column">
-      <div class="flutter-chip">Flutter Developer · BIS Graduate · Egypt</div>
-
-      <h1 class="hero-headline">
-        <div class="name-gradient">Marwan</div>
-        <div class="name-gradient">AbdelRahim</div>
-      </h1>
-
-      <p class="hero-subtitle">
-        Cross-Platform Mobile Developer ·
-        <span class="highlight">Flutter &amp; Dart</span>
-      </p>
-
-      <p class="hero-body">
-        Business Information Systems graduate with strong analytical skills and solid experience in developing cross-platform mobile applications. Skilled in transforming business requirements into efficient technical solutions — Clean Architecture, Bloc/Cubit, Firebase, REST APIs.
-      </p>
-
-      <div class="button-row">
-        <a class="md-filled-button" href="tel:201066213056">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
-          +20 1066213056
-        </a>
-        <a class="md-outlined-button" href="mailto:marwanalihffj@gmail.com">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          Email
-        </a>
-        <a class="md-outlined-button" href="https://linkedin.com/in/marwan-ali-4425aa356" target="_blank">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-          LinkedIn
-        </a>
-        <a class="md-outlined-button" href="https://github.com/marwanabdelrhiem" target="_blank">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48l-.01-1.69c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.71.11 2.51.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>
-          GitHub
-        </a>
-      </div>
-    </div>
-
-    <!-- Profile Card -->
-    <div class="profile-card-wrap">
-      <div class="profile-card">
-        <div class="avatar-container">
-          <div class="avatar-ring"></div>
-          <div class="avatar-ring-2"></div>
-          <div class="avatar-circle">MA</div>
-          <div class="status-dot"></div>
-        </div>
-
-        <div class="card-name">Marwan AbdelRahim</div>
-        <div class="card-handle">@marwanabdelrhiem</div>
-
-        <div class="tag-wrap">
-          <span class="filter-chip">Clean Arch</span>
-          <span class="filter-chip">Bloc/Cubit</span>
-          <span class="filter-chip">REST API</span>
-          <span class="filter-chip">Firebase</span>
-          <span class="filter-chip">SQLite</span>
-        </div>
-
-        <div class="card-divider"></div>
-        <div class="card-stat-row">
-          <div class="card-stat">
-            <div class="stat-value">7+</div>
-            <div class="stat-label">Projects</div>
-          </div>
-          <div class="card-stat">
-            <div class="stat-value">130h</div>
-            <div class="stat-label">Training</div>
-          </div>
-          <div class="card-stat">
-            <div class="stat-value">2025</div>
-            <div class="stat-label">Graduated</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ SKILLS ═══ -->
-  <section class="section" id="skills">
-    <div class="section-header reveal up">
-      <div class="overline">Technical Proficiency</div>
-      <h2 class="section-headline">Core Skills</h2>
-    </div>
-    <div class="skills-grid">
-      <div class="reveal left" style="transition-delay:.04s">
-        <div class="skill-tile">
-          <div class="skill-header"><span class="skill-label">Flutter &amp; Dart</span><span class="skill-value">92%</span></div>
-          <div class="progress-track"><div class="progress-fill" style="--w:92%"></div></div>
-        </div>
-      </div>
-      <div class="reveal right" style="transition-delay:.08s">
-        <div class="skill-tile">
-          <div class="skill-header"><span class="skill-label">State Management (Bloc/Cubit)</span><span class="skill-value">88%</span></div>
-          <div class="progress-track"><div class="progress-fill" style="--w:88%"></div></div>
-        </div>
-      </div>
-      <div class="reveal left" style="transition-delay:.12s">
-        <div class="skill-tile">
-          <div class="skill-header"><span class="skill-label">Firebase (Auth + Firestore)</span><span class="skill-value">85%</span></div>
-          <div class="progress-track"><div class="progress-fill" style="--w:85%"></div></div>
-        </div>
-      </div>
-      <div class="reveal right" style="transition-delay:.16s">
-        <div class="skill-tile">
-          <div class="skill-header"><span class="skill-label">REST API Integration</span><span class="skill-value">86%</span></div>
-          <div class="progress-track"><div class="progress-fill" style="--w:86%"></div></div>
-        </div>
-      </div>
-      <div class="reveal left" style="transition-delay:.2s">
-        <div class="skill-tile">
-          <div class="skill-header"><span class="skill-label">Clean Architecture / MVC</span><span class="skill-value">83%</span></div>
-          <div class="progress-track"><div class="progress-fill" style="--w:83%"></div></div>
-        </div>
-      </div>
-      <div class="reveal right" style="transition-delay:.24s">
-        <div class="skill-tile">
-          <div class="skill-header"><span class="skill-label">SQLite / Database Design</span><span class="skill-value">80%</span></div>
-          <div class="progress-track"><div class="progress-fill" style="--w:80%"></div></div>
-        </div>
-      </div>
-      <div class="reveal left" style="transition-delay:.28s">
-        <div class="skill-tile">
-          <div class="skill-header"><span class="skill-label">Systems Analysis &amp; BPM</span><span class="skill-value">82%</span></div>
-          <div class="progress-track"><div class="progress-fill" style="--w:82%"></div></div>
-        </div>
-      </div>
-      <div class="reveal right" style="transition-delay:.32s">
-        <div class="skill-tile">
-          <div class="skill-header"><span class="skill-label">Git &amp; GitHub</span><span class="skill-value">78%</span></div>
-          <div class="progress-track"><div class="progress-fill" style="--w:78%"></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ PROJECTS ═══ -->
-  <section class="section" id="projects">
-    <div class="section-header reveal up">
-      <div class="overline">What I've Built</div>
-      <h2 class="section-headline">Projects</h2>
-    </div>
-    <div class="projects-grid">
-
-      <div class="reveal up" style="transition-delay:.05s">
-        <div class="project-card">
-          <div class="proj-category">Main Project</div>
-          <div class="proj-title">ToDo App</div>
-          <div class="proj-description">Full task management system with local SQLite database. CRUD operations in modular, scalable clean architecture with Cubit state management and optimized queries.</div>
-          <div class="chip-row">
-            <span class="tech-chip">Flutter</span><span class="tech-chip">Dart</span><span class="tech-chip">SQLite</span><span class="tech-chip">Cubit</span><span class="tech-chip">Clean Arch</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal up" style="transition-delay:.1s">
-        <div class="project-card">
-          <div class="proj-category">College Project</div>
-          <div class="proj-title">DentCare</div>
-          <div class="proj-description">Dental clinic management system covering patients, appointments, and doctor schedules. Firebase Auth for secure login with Firestore for patient data and treatment history.</div>
-          <div class="chip-row">
-            <span class="tech-chip">Flutter</span><span class="tech-chip">Firebase</span><span class="tech-chip">Firestore</span><span class="tech-chip">Auth</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal up" style="transition-delay:.15s">
-        <div class="project-card">
-          <div class="proj-category">API Integration</div>
-          <div class="proj-title">Business News App</div>
-          <div class="proj-description">Categorized business news platform with search, filters, and fast loading via REST API integration and Cubit state management.</div>
-          <div class="chip-row">
-            <span class="tech-chip">Flutter</span><span class="tech-chip">REST API</span><span class="tech-chip">Cubit</span>
-          </div>
-          <a class="github-btn" href="https://github.com/marwanabdelrhiem/news_app_with_cubit-2" target="_blank">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48l-.01-1.69c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.71.11 2.51.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>
-            View on GitHub
-          </a>
-        </div>
-      </div>
-
-      <div class="reveal up" style="transition-delay:.2s">
-        <div class="project-card">
-          <div class="proj-category">UI Focus</div>
-          <div class="proj-title">Bookly App</div>
-          <div class="proj-description">Online book browsing platform with clean UI, network handling, and seamless API integration for a smooth reading discovery experience.</div>
-          <div class="chip-row">
-            <span class="tech-chip">Flutter</span><span class="tech-chip">REST API</span>
-          </div>
-          <a class="github-btn" href="https://github.com/marwanabdelrhiem/bookly" target="_blank">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48l-.01-1.69c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.71.11 2.51.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>
-            View on GitHub
-          </a>
-        </div>
-      </div>
-
-      <div class="reveal up" style="transition-delay:.25s">
-        <div class="project-card">
-          <div class="proj-category">Clean Architecture</div>
-          <div class="proj-title">Meal App</div>
-          <div class="proj-description">Meal planning application with advanced filters and favorites system built using Provider and clean architecture patterns.</div>
-          <div class="chip-row">
-            <span class="tech-chip">Flutter</span><span class="tech-chip">Provider</span><span class="tech-chip">Clean Arch</span>
-          </div>
-          <a class="github-btn" href="https://github.com/marwanabdelrhiem/MEAL_APP2" target="_blank">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48l-.01-1.69c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.71.11 2.51.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>
-            View on GitHub
-          </a>
-        </div>
-      </div>
-
-      <div class="reveal up" style="transition-delay:.3s">
-        <div class="project-card">
-          <div class="proj-category">Open Source</div>
-          <div class="proj-title">TokuApp</div>
-          <div class="proj-description">Open-source Flutter project available on GitHub. Built with a focus on real-world application development and clean code principles.</div>
-          <div class="chip-row">
-            <span class="tech-chip">Flutter</span><span class="tech-chip">Dart</span><span class="tech-chip">Open Source</span>
-          </div>
-          <a class="github-btn" href="https://github.com/marwanabdelrhiem/TokuApp" target="_blank">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48l-.01-1.69c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.71.11 2.51.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>
-            View on GitHub
-          </a>
-        </div>
-      </div>
-
-      <div class="reveal up" style="transition-delay:.35s">
-        <div class="project-card">
-          <div class="proj-category">Open Source</div>
-          <div class="proj-title">Eazy App</div>
-          <div class="proj-description">Open-source Flutter application focused on practical real-world functionality with clean, maintainable code structure.</div>
-          <div class="chip-row">
-            <span class="tech-chip">Flutter</span><span class="tech-chip">Dart</span><span class="tech-chip">Open Source</span>
-          </div>
-          <a class="github-btn" href="https://github.com/marwanabdelrhiem/Eazy_App" target="_blank">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48l-.01-1.69c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.71.11 2.51.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>
-            View on GitHub
-          </a>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ═══ EDUCATION ═══ -->
-  <section class="section" id="education">
-    <div class="section-header reveal up">
-      <div class="overline">Academic Background</div>
-      <h2 class="section-headline">Education &amp; Certifications</h2>
-    </div>
-
-    <div class="reveal left">
-      <div class="edu-card">
-        <div class="edu-institute">Higher Institute for Computers &amp; Information Systems — Fifth Settlement, Cairo</div>
-        <div class="edu-degree">Bachelor's in Business Information Systems (BIS)</div>
-        <div class="edu-year">Graduation: May 2025</div>
-        <div class="course-chips">
-          <span class="course-chip">Business Process Modeling</span>
-          <span class="course-chip">Systems Analysis &amp; Design</span>
-          <span class="course-chip">Database Design &amp; SQL</span>
-          <span class="course-chip">Decision Support Systems</span>
-          <span class="course-chip">IT Project Management</span>
-          <span class="course-chip">Information Systems Strategy</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="reveal right" style="transition-delay:.1s">
-      <div class="cert-tile">
-        <div class="cert-leading">🏆</div>
-        <div>
-          <div class="cert-title">Flutter Diploma (130 hours)</div>
-          <div class="cert-sub">Instant Software Solutions · 2025</div>
-        </div>
-      </div>
-    </div>
-    <div class="reveal right" style="transition-delay:.18s">
-      <div class="cert-tile">
-        <div class="cert-leading">📱</div>
-        <div>
-          <div class="cert-title">Flutter Developer Training (1 Month)</div>
-          <div class="cert-sub">Instant Software Solutions · 2025</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ SOFT SKILLS ═══ -->
-  <section class="section" id="soft-skills">
-    <div class="section-header reveal up">
-      <div class="overline">Beyond the Code</div>
-      <h2 class="section-headline">Soft Skills</h2>
-    </div>
-    <div class="soft-grid">
-      <div class="reveal up" style="transition-delay:.05s"><div class="soft-card"><div class="soft-emoji">🧠</div><div class="soft-text">Analytical Thinking &amp; Problem Solving</div></div></div>
-      <div class="reveal up" style="transition-delay:.1s"><div class="soft-card"><div class="soft-emoji">⚙️</div><div class="soft-text">Business Process Understanding</div></div></div>
-      <div class="reveal up" style="transition-delay:.15s"><div class="soft-card"><div class="soft-emoji">🤝</div><div class="soft-text">Team Collaboration &amp; Communication</div></div></div>
-      <div class="reveal up" style="transition-delay:.2s"><div class="soft-card"><div class="soft-emoji">⚡</div><div class="soft-text">Fast Learning</div></div></div>
-      <div class="reveal up" style="transition-delay:.25s"><div class="soft-card"><div class="soft-emoji">🔍</div><div class="soft-text">Attention to Detail</div></div></div>
-    </div>
-  </section>
-
-  <!-- ═══ LANGUAGES ═══ -->
-  <section class="section" id="languages">
-    <div class="section-header reveal up">
-      <div class="overline">Communication</div>
-      <h2 class="section-headline">Languages</h2>
-    </div>
-    <div class="lang-row">
-      <div class="reveal left">
-        <div class="lang-card">
-          <div class="lang-flag">🇪🇬</div>
-          <div>
-            <div class="lang-name">Arabic</div>
-            <div class="lang-level">Native Speaker</div>
-          </div>
-        </div>
-      </div>
-      <div class="reveal right">
-        <div class="lang-card">
-          <div class="lang-flag">🇬🇧</div>
-          <div>
-            <div class="lang-name">English</div>
-            <div class="lang-level">Intermediate · B1</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ FOOTER ═══ -->
-  <footer class="footer">
-    <div class="footer-copy">
-      Built with <span>Flutter</span> spirit — <span>Marwan AbdelRahim</span> · Suez, Egypt · 2025
-    </div>
-    <div class="footer-links">
-      <a class="footer-pill" href="https://github.com/marwanabdelrhiem" target="_blank">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48l-.01-1.69c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.71.11 2.51.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>
-        GitHub
-      </a>
-      <a class="footer-pill" href="https://linkedin.com/in/marwan-ali-4425aa356" target="_blank">
-        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-        LinkedIn
-      </a>
-      <a class="footer-pill" href="mailto:marwanalihffj@gmail.com">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-        Email
-      </a>
-    </div>
-  </footer>
-</div>
-
-<!-- Flutter FAB -->
-<button class="fab" id="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-
-<!-- Snackbar -->
-<div class="snackbar" id="snackbar">Copied to clipboard!</div>
-
-<script>
-// ── SPLASH ──
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('flutter-splash').classList.add('hidden');
-  }, 2200);
-});
-
-// ── PARTICLE CANVAS ──
-(function() {
-  const c = document.getElementById('bg-canvas');
-  const ctx = c.getContext('2d');
-  let W, H, nodes = [];
-  const N = 55, R = 120;
-
-  function resize() { W = c.width = innerWidth; H = c.height = innerHeight; }
-  resize(); window.addEventListener('resize', resize);
-
-  function Node() {
-    this.x = Math.random() * W;
-    this.y = Math.random() * H;
-    this.vx = (Math.random() - .5) * .35;
-    this.vy = (Math.random() - .5) * .35;
-    this.r = Math.random() * 1.5 + .5;
-  }
-  for (let i = 0; i < N; i++) nodes.push(new Node());
-
-  function frame() {
-    ctx.clearRect(0, 0, W, H);
-    nodes.forEach(n => {
-      n.x += n.vx; n.y += n.vy;
-      if (n.x < 0 || n.x > W) n.vx *= -1;
-      if (n.y < 0 || n.y > H) n.vy *= -1;
-    });
-    for (let i = 0; i < N; i++) {
-      for (let j = i+1; j < N; j++) {
-        const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
-        const d = Math.hypot(dx, dy);
-        if (d < R) {
-          ctx.beginPath();
-          ctx.strokeStyle = `rgba(84,197,248,${(1-d/R)*.15})`;
-          ctx.lineWidth = (1-d/R) * .8;
-          ctx.moveTo(nodes[i].x, nodes[i].y);
-          ctx.lineTo(nodes[j].x, nodes[j].y);
-          ctx.stroke();
-        }
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const PortfolioPage()),
+        );
       }
-    }
-    nodes.forEach(n => {
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(84,197,248,.4)';
-      ctx.fill();
     });
-    requestAnimationFrame(frame);
   }
-  frame();
-})();
 
-// ── SCROLL REVEAL ──
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add('in');
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.flutter_dash, size: 90, color: Color(0xFF54C5F8)),
+            SizedBox(height: 24),
+            Text(
+              'Marwan.dev',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF54C5F8),
+              ),
+            ),
+            SizedBox(height: 24),
+            SizedBox(width: 220, child: LinearProgressIndicator()),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-// ── SKILL BAR ANIMATION ──
-const skillObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      const fill = e.target;
-      fill.style.width = fill.style.getPropertyValue('--w') || '0%';
-      skillObs.unobserve(fill);
-    }
-  });
-}, { threshold: 0.3 });
-document.querySelectorAll('.progress-fill').forEach(f => skillObs.observe(f));
+class PortfolioPage extends StatelessWidget {
+  const PortfolioPage({super.key});
 
-// ── FAB VISIBILITY ──
-window.addEventListener('scroll', () => {
-  const fab = document.getElementById('fab');
-  if (scrollY > 400) fab.classList.add('visible');
-  else fab.classList.remove('visible');
-});
-</script>
-</body>
-</html>
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Row(
+          children: [
+            Icon(Icons.flutter_dash, color: Color(0xFF54C5F8)),
+            SizedBox(width: 8),
+            Text('marwan.dev'),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            HeroSection(),
+            SizedBox(height: 40),
+            SectionTitle('Core Skills'),
+            SkillsSection(),
+            SizedBox(height: 40),
+            SectionTitle('Projects'),
+            ProjectsSection(),
+            SizedBox(height: 40),
+            SectionTitle('Education & Certifications'),
+            EducationSection(),
+            SizedBox(height: 40),
+            SectionTitle('Soft Skills'),
+            SoftSkillsSection(),
+            SizedBox(height: 40),
+            SectionTitle('Languages'),
+            LanguagesSection(),
+            SizedBox(height: 40),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF54C5F8),
+        foregroundColor: Colors.black,
+        onPressed: () {},
+        child: const Icon(Icons.arrow_upward),
+      ),
+    );
+  }
+}
+
+class HeroSection extends StatelessWidget {
+  const HeroSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 800;
+
+        final info = Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: const Color(0xFF54C5F8)),
+                ),
+                child: const Text(
+                  'Flutter Developer · BIS Graduate · Egypt',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Marwan\nAbdelRahim',
+                style: TextStyle(
+                  fontSize: 52,
+                  fontWeight: FontWeight.bold,
+                  height: 1,
+                  color: Color(0xFF54C5F8),
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Cross-Platform Mobile Developer · Flutter & Dart',
+                style: TextStyle(fontSize: 18, color: Colors.white70),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Business Information Systems graduate with strong analytical skills and experience building cross-platform mobile applications using Flutter, Firebase, REST APIs, and Clean Architecture.',
+                style: TextStyle(height: 1.7, color: Colors.white70),
+              ),
+              const SizedBox(height: 20),
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  FilledButton.icon(
+                    onPressed: null,
+                    icon: Icon(Icons.phone),
+                    label: Text('+20 1066213056'),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: null,
+                    icon: Icon(Icons.email),
+                    label: Text('Email'),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+
+        final card = const Padding(
+          padding: EdgeInsets.only(top: 24),
+          child: ProfileCard(),
+        );
+
+        if (isMobile) {
+          return Column(children: [info, card]);
+        }
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            info,
+            const SizedBox(width: 30),
+            const ProfileCard(),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ProfileCard extends StatelessWidget {
+  const ProfileCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 300,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: const Color(0xFF161B22),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: Colors.white10),
+      ),
+      child: Column(
+        children: [
+          const CircleAvatar(
+            radius: 48,
+            backgroundColor: Color(0xFF54C5F8),
+            child: Text(
+              'MA',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Marwan AbdelRahim',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 6),
+          const Text('@marwanabdelrhiem', style: TextStyle(color: Colors.white60)),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: const [
+              SkillChip('Clean Arch'),
+              SkillChip('Bloc/Cubit'),
+              SkillChip('Firebase'),
+              SkillChip('REST API'),
+            ],
+          ),
+          const Divider(height: 30),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              StatItem('7+', 'Projects'),
+              StatItem('130h', 'Training'),
+              StatItem('2025', 'Graduated'),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class StatItem extends StatelessWidget {
+  final String value;
+  final String label;
+
+  const StatItem(this.value, this.label, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(
+            color: Color(0xFF54C5F8),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(label, style: const TextStyle(fontSize: 11, color: Colors.white60)),
+      ],
+    );
+  }
+}
+
+class SectionTitle extends StatelessWidget {
+  final String title;
+  const SectionTitle(this.title, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Text(
+        title,
+        style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+}
+
+class SkillsSection extends StatelessWidget {
+  const SkillsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        SkillProgress('Flutter & Dart', 0.92),
+        SkillProgress('Bloc / Cubit', 0.88),
+        SkillProgress('Firebase', 0.85),
+        SkillProgress('REST API', 0.86),
+        SkillProgress('Clean Architecture', 0.83),
+        SkillProgress('Git & GitHub', 0.78),
+      ],
+    );
+  }
+}
+
+class SkillProgress extends StatelessWidget {
+  final String title;
+  final double value;
+
+  const SkillProgress(this.title, this.value, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(title),
+                Text('${(value * 100).toInt()}%'),
+              ],
+            ),
+            const SizedBox(height: 10),
+            LinearProgressIndicator(value: value, minHeight: 6),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProjectsSection extends StatelessWidget {
+  const ProjectsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final projects = [
+      ['ToDo App', 'SQLite + Cubit task management app'],
+      ['DentCare', 'Clinic management system using Firebase'],
+      ['Business News App', 'REST API integration with Cubit'],
+      ['Bookly App', 'Book browsing platform'],
+      ['Meal App', 'Filters and favorites'],
+      ['Toku App', 'Language learning app'],
+      ['Eazy App', 'Real-world Flutter application'],
+    ];
+
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: projects
+          .map((p) => SizedBox(
+                width: 320,
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          p[0],
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF54C5F8),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(p[1], style: const TextStyle(color: Colors.white70)),
+                      ],
+                    ),
+                  ),
+                ),
+              ))
+          .toList(),
+    );
+  }
+}
+
+class EducationSection extends StatelessWidget {
+  const EducationSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        ListTile(
+          tileColor: Color(0xFF161B22),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          title: Text('Bachelor of Business Information Systems'),
+          subtitle: Text(
+            'Higher Institute for Computers & Information Systems\nGraduation: May 2025',
+          ),
+        ),
+        SizedBox(height: 12),
+        ListTile(
+          tileColor: Color(0xFF161B22),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          title: Text('Flutter Diploma (130 Hours)'),
+          subtitle: Text('Instant Software Solutions · 2025'),
+        ),
+      ],
+    );
+  }
+}
+
+class SoftSkillsSection extends StatelessWidget {
+  const SoftSkillsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    const skills = [
+      'Problem Solving',
+      'Analytical Thinking',
+      'Teamwork',
+      'Fast Learning',
+      'Attention to Detail',
+    ];
+
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      children: skills.map((e) => SkillChip(e)).toList(),
+    );
+  }
+}
+
+class LanguagesSection extends StatelessWidget {
+  const LanguagesSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        ListTile(
+          leading: Text('🇪🇬', style: TextStyle(fontSize: 28)),
+          title: Text('Arabic'),
+          subtitle: Text('Native Speaker'),
+        ),
+        ListTile(
+          leading: Text('🇬🇧', style: TextStyle(fontSize: 28)),
+          title: Text('English'),
+          subtitle: Text('Intermediate (B1)'),
+        ),
+      ],
+    );
+  }
+}
+
+class SkillChip extends StatelessWidget {
+  final String text;
+  const SkillChip(this.text, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+      label: Text(text),
+      backgroundColor: const Color(0xFF21262D),
+      labelStyle: const TextStyle(color: Color(0xFF54C5F8)),
+      side: BorderSide.none,
+    );
+  }
+}
+```
+
+## تشغيل المشروع
+
+```bash
+flutter create marwan_portfolio
+cd marwan_portfolio
+# استبدل محتوى lib/main.dart بهذا الملف
+flutter run
+```
